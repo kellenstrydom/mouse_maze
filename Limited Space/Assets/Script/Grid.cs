@@ -20,11 +20,15 @@ public class Grid : MonoBehaviour
     public static float rowLength = 1;
     public Bounds bounds;
 
+    public static bool canPLay = false;
+
     public GameObject scent;
 
     public bool needsUpdate;
 
     public List<Pheromone> allPheremones = new List<Pheromone>();
+
+    public GameObject SelectPanel;
 
     private void Awake()
     {
@@ -94,5 +98,21 @@ public class Grid : MonoBehaviour
             queue.AddRange(queue[0].TrailUpdate());
             queue.RemoveAt(0);
         }
+
+        
     }
+    public void PlayPause()
+    {
+        canPLay = !canPLay;
+        SelectPanel.SetActive(!canPLay);
+        if (canPLay)
+            updatePheromones();
+        
+    }
+
+    public void Quit()
+    {
+        Application.Quit();
+    }
+    
 }

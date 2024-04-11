@@ -13,6 +13,7 @@ public class Pheromone : MonoBehaviour
     private Grid grid;
     public int newVal;
     public bool isOnFood;
+    public bool isOnWall;
 
     private void Awake()
     {
@@ -64,18 +65,23 @@ public class Pheromone : MonoBehaviour
         }
         else
             scentValue = newVal;
+        List<Pheromone> result = new List<Pheromone>();
+        
+        if (isOnWall)
+        {
+            scentValue = 256;
+            return result;
+        }
         
         if (scentValue > Grid.maxScent) Grid.maxScent = scentValue;
 
-        List<Pheromone> result = new List<Pheromone>();
+        
         foreach (Pheromone other in adjPheromones)
         {
             if (other.setNewVal(scentValue+1))
                 result.Add(other);
         }
-        
-        
-        
+
         return result;
     }
 
@@ -88,15 +94,47 @@ public class Pheromone : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        Debug.Log("off food");
-        isOnFood = false;
-        grid.needsUpdate = true;    }
+        if (other.CompareTag("Food"))
+        {
+            Debug.Log("off food");
+            isOnFood = false;
+            grid.needsUpdate = true;
+        }
+        
+        if (other.CompareTag("Wall"))
+        {
+            Debug.Log("on wall");
+            isOnWall = false;
+            //grid.needsUpdate = true; 
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        
+        if (other.CompareTag("Wall"))
+        {
+            Debug.Log("on wall");
+            isOnWall = true;
+        }
+        
+        
+    }
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        Debug.Log("on food");
-        isOnFood = true;
-        grid.needsUpdate = true;
-        //TrailUpdate();
+        if (col.CompareTag("Food"))
+        {
+            Debug.Log("on food");
+            isOnFood = true;
+            grid.needsUpdate = true;
+        }
+
+        if (col.CompareTag("Wall"))
+        {
+            Debug.Log("on wall");
+            isOnWall = true;
+            //grid.needsUpdate = true; 
+        }
     }
 }

@@ -45,6 +45,8 @@ public class Placement : MonoBehaviour
             Rotate(-1);
         if (Input.GetKeyDown(KeyCode.Period))
             Rotate(1);
+        if (Input.GetKeyDown(KeyCode.R))
+            Rotate(-1);
     }
 
     void CancelPlacement()
@@ -66,12 +68,17 @@ public class Placement : MonoBehaviour
             // cant place
             return;
         }
-        
         _placeableObject.Placed();
-        _placeableObject.enabled = false;
-
+        
         isHolding = false;
         objInHand = null;
+        
+        
+        if (_placeableObject.isWall)
+        {
+            gameObject.GetComponent<ObjectSelection>().Regrab();
+        }
+        _placeableObject.enabled = false;
     }
 
     public void PickUpObject(Transform obj)

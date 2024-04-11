@@ -14,4 +14,9 @@ public class CheeseBehaviour : MonoBehaviour
         transform.position = Grid.SnapToGrid(transform.position);
     }
 
+    public void Eat()
+    {
+        gameObject.SetActive(false);
+    }
+
 }

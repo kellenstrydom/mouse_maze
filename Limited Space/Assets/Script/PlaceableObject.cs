@@ -6,9 +6,11 @@ using UnityEngine;
 public class PlaceableObject : MonoBehaviour
 {
     public bool isPlaceable = true;
+    public bool isWall;
 
     public void Placed()
     {
+        if (!isWall) return;
         Collider2D[] collider2Ds = GetComponents<Collider2D>();
         foreach (Collider2D col in collider2Ds)
         {
@@ -18,11 +20,13 @@ public class PlaceableObject : MonoBehaviour
     
     private void OnTriggerEnter2D(Collider2D col)
     {
-        isPlaceable = false;
+        if (col.CompareTag("Food") || col.CompareTag("Wall"))
+            isPlaceable = false;
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        isPlaceable = true;
+        if (other.CompareTag("Food") || other.CompareTag("Wall"))
+            isPlaceable = true;
     }
 }

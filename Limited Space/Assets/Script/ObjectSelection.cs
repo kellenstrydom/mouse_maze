@@ -5,8 +5,10 @@ using UnityEngine;
 
 public class ObjectSelection : MonoBehaviour
 {
-    public GameObject Option;
+    public int Option;
     private Placement _placement;
+    [SerializeField] 
+    private List<GameObject> availableObjs;
 
     private void Awake()
     {
@@ -17,16 +19,21 @@ public class ObjectSelection : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            GrabObject(Option);
-        }
+        // if (Input.GetKeyDown(KeyCode.E))
+        // {
+        //     GrabObject(Option);
+        // }
     }
 
-    void GrabObject(GameObject selectedObject)
+    public void Regrab()
     {
-        GameObject obj = Instantiate(selectedObject, Vector3.zero, Quaternion.identity);
-        
+        GrabObject(Option);
+    }
+
+    public void GrabObject(int i)
+    {
+        GameObject obj = Instantiate(availableObjs[i], Camera.main.ScreenToWorldPoint(Input.mousePosition), Quaternion.identity);
+        Option = i;
         _placement.PickUpObject(obj.transform);
     }
     
